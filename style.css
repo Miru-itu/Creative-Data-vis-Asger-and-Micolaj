@@ -1,0 +1,116 @@
+/* Import the Roboto font */
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap");
+
+/* Basic reset */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* Body styling */
+body {
+	font-family: Georgia, serif;
+	background-color: #212529;
+	color: #fff;
+	line-height: 1.6;
+	padding: 20px;
+}
+
+/* Header styling */
+.header {
+	text-align: center;
+	padding: 20px 0;
+	color: #fff;
+	margin-bottom: 20px;
+	border-bottom-style: solid;
+	border-top-style: solid;
+	border-color: #fff;
+}
+
+.header h1 {
+	font-size: 2.5em;
+	margin-bottom: 10px;
+}
+
+.header h2 {
+	font-size: 1.5em;
+	font-weight: 300;
+}
+
+/* Description styling */
+.description {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 20px;
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-color: #fff;
+}
+
+.description .intro,
+.description .how-to-read,
+.description #data-description {
+	padding: 50px;
+	border-radius: 5px;
+	margin-right: 20px;
+}
+
+.description .intro p {
+	margin-bottom: 20px; /* Adjust this value to change the spacing between paragraphs */
+}
+
+.description .intro {
+	flex: 2;
+}
+
+.description .how-to-read {
+	flex: 2;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	padding-bottom: 120px;
+}
+
+.description #data-description {
+	padding-top: 150px;
+	padding-right: 50px;
+	flex: 0;
+	text-align: left; /* Center align the content */
+}
+
+/* Remove right margin from the last item */
+.description .intro,
+.description .how-to-read,
+.description #data-description:last-child {
+	margin-right: 0;
+}
+
+/* Canvas styling */
+#canvas {
+	width: 100%;
+	height: 600px;
+	margin-bottom: 20px;
+}
+
+/* Source styling */
+.source {
+	text-align: center;
+	padding: 10px;
+	color: #fff;
+	margin-top: 20px;
+}
+
+/* Link styling */
+a {
+	color: #fff;
+}
+
+a:hover {
+	color: pink;
+}
+
+.source p {
+	margin: 5px 0;
+	font-size: 12px;
+}
