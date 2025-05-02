@@ -1,292 +1,101 @@
 [
   {
-    "Century": 1970,
-    "Year": 2,
-    "Temp": 6.2,
-    "PP": 1397,
-    "snowDays": 62,
-    "stormDays": 2,
-    "foggyDays": 37,
-    "hailDays": 9
+    "country": "Germany",
+    "year": 2016,
+    "generated": 23039154,
+    "incinerated": 1056183,
+    "recycled": 9843189
   },
   {
-    "Century": 1970,
-    "Year": 4,
-    "Temp": 7.1,
-    "PP": 1205,
-    "snowDays": 24,
-    "stormDays": 2,
-    "foggyDays": 33,
-    "hailDays": 1
+    "country": "Germany",
+    "year": 2014,
+    "generated": 21812660,
+    "incinerated": 1263306,
+    "recycled": 9641160
   },
   {
-    "Century": 1970,
-    "Year": 5,
-    "Temp": 6.4,
-    "PP": 1055,
-    "snowDays": 47,
-    "stormDays": 1,
-    "foggyDays": 36,
-    "hailDays": 4
+    "country": "Germany",
+    "year": 2012,
+    "generated": 21983896,
+    "incinerated": 1142653,
+    "recycled": 9687326
   },
   {
-    "Century": 1970,
-    "Year": 6,
-    "Temp": 6.8,
-    "PP": 1144,
-    "snowDays": 45,
-    "stormDays": 1,
-    "foggyDays": 45,
-    "hailDays": 4
+    "country": "Germany",
+    "year": 2010,
+    "generated": 19931452,
+    "incinerated": 1128772,
+    "recycled": 9500261
   },
   {
-    "Century": 1970,
-    "Year": 7,
-    "Temp": 6.4,
-    "PP": 1395,
-    "snowDays": 50,
-    "stormDays": 0,
-    "foggyDays": 30,
-    "hailDays": 7
+    "country": "Germany",
+    "year": 2008,
+    "generated": 22323152,
+    "incinerated": 1543961,
+    "recycled": 0
   },
   {
-    "Century": 1970,
-    "Year": 8,
-    "Temp": 6.2,
-    "PP": 1401,
-    "snowDays": 58,
-    "stormDays": 1,
-    "foggyDays": 39,
-    "hailDays": 11
+    "country": "Germany",
+    "year": 2006,
+    "generated": 21705416,
+    "incinerated": 1351419,
+    "recycled": 0
   },
   {
-    "Century": 1970,
-    "Year": 9,
-    "Temp": 5.4,
-    "PP": 1619,
-    "snowDays": 76,
-    "stormDays": 3,
-    "foggyDays": 23,
-    "hailDays": 10
+    "country": "Germany",
+    "year": 2004,
+    "generated": 20000026,
+    "incinerated": 1436474,
+    "recycled": 0
+  },
+
+  {
+    "country": "Italy",
+    "year": 2016,
+    "generated": 9706964,
+    "incinerated": 374739,
+    "recycled": 1861771
   },
   {
-    "Century": 1980,
-    "Year": 0,
-    "Temp": 6.4,
-    "PP": 1381,
-    "snowDays": 53,
-    "stormDays": 1,
-    "foggyDays": 45,
-    "hailDays": 13
+    "country": "Italy",
+    "year": 2014,
+    "generated": 8877164,
+    "incinerated": 407142,
+    "recycled": 1821805
   },
   {
-    "Century": 1980,
-    "Year": 1,
-    "Temp": 5.8,
-    "PP": 1558,
-    "snowDays": 7,
-    "stormDays": 1,
-    "foggyDays": 37,
-    "hailDays": 10
+    "country": "Italy",
+    "year": 2012,
+    "generated": 8987032,
+    "incinerated": 393680,
+    "recycled": 1636793
   },
   {
-    "Century": 1980,
-    "Year": 2,
-    "Temp": 6.8,
-    "PP": 2084,
-    "snowDays": 57,
-    "stormDays": 1,
-    "foggyDays": 34,
-    "hailDays": 21
+    "country": "Italy",
+    "year": 2010,
+    "generated": 8543415,
+    "incinerated": 382719,
+    "recycled": 1866212
   },
   {
-    "Century": 1980,
-    "Year": 3,
-    "Temp": 6.2,
-    "PP": 1675,
-    "snowDays": 63,
-    "stormDays": 4,
-    "foggyDays": 36,
-    "hailDays": 25
+    "country": "Italy",
+    "year": 2008,
+    "generated": 6878155,
+    "incinerated": 448750,
+    "recycled": 0
   },
   {
-    "Century": 1980,
-    "Year": 4,
-    "Temp": 7,
-    "PP": 1551,
-    "snowDays": 46,
-    "stormDays": 0,
-    "foggyDays": 27,
-    "hailDays": 14
+    "country": "Italy",
+    "year": 2006,
+    "generated": 7464670,
+    "incinerated": 506582,
+    "recycled": 0
   },
   {
-    "Century": 1980,
-    "Year": 5,
-    "Temp": 5.9,
-    "PP": 1624,
-    "snowDays": 64,
-    "stormDays": 1,
-    "foggyDays": 28,
-    "hailDays": 6
-  },
-  {
-    "Century": 1980,
-    "Year": 6,
-    "Temp": 6.3,
-    "PP": 1914,
-    "snowDays": 57,
-    "stormDays": 2,
-    "foggyDays": 20,
-    "hailDays": 15
-  },
-  {
-    "Century": 1980,
-    "Year": 7,
-    "Temp": 6.9,
-    "PP": 1655,
-    "snowDays": 36,
-    "stormDays": 1,
-    "foggyDays": 26,
-    "hailDays": 8
-  },
-  {
-    "Century": 1980,
-    "Year": 8,
-    "Temp": 6.6,
-    "PP": 1708,
-    "snowDays": 64,
-    "stormDays": 2,
-    "foggyDays": 31,
-    "hailDays": 16
-  },
-  {
-    "Century": 1980,
-    "Year": 9,
-    "Temp": 6.7,
-    "PP": 1591,
-    "snowDays": 57,
-    "stormDays": 1,
-    "foggyDays": 22,
-    "hailDays": 23
-  },
-  {
-    "Century": 1990,
-    "Year": 0,
-    "Temp": 7.2,
-    "PP": 1835,
-    "snowDays": 53,
-    "stormDays": 5,
-    "foggyDays": 31,
-    "hailDays": 27
-  },
-  {
-    "Century": 1990,
-    "Year": 1,
-    "Temp": 7.5,
-    "PP": 1541,
-    "snowDays": 37,
-    "stormDays": 2,
-    "foggyDays": 29,
-    "hailDays": 12
-  },
-  {
-    "Century": 1990,
-    "Year": 2,
-    "Temp": 7,
-    "PP": 1817,
-    "snowDays": 51,
-    "stormDays": 0,
-    "foggyDays": 29,
-    "hailDays": 21
-  },
-  {
-    "Century": 1990,
-    "Year": 3,
-    "Temp": 6.2,
-    "PP": 1181,
-    "snowDays": 61,
-    "stormDays": 0,
-    "foggyDays": 25,
-    "hailDays": 18
-  },
-  {
-    "Century": 1990,
-    "Year": 4,
-    "Temp": 6.1,
-    "PP": 1212,
-    "snowDays": 76,
-    "stormDays": 1,
-    "foggyDays": 31,
-    "hailDays": 30
-  },
-  {
-    "Century": 1990,
-    "Year": 5,
-    "Temp": 5.8,
-    "PP": 1274,
-    "snowDays": 93,
-    "stormDays": 1,
-    "foggyDays": 35,
-    "hailDays": 21
-  },
-  {
-    "Century": 1990,
-    "Year": 6,
-    "Temp": 6.6,
-    "PP": 1119,
-    "snowDays": 62,
-    "stormDays": 0,
-    "foggyDays": 23,
-    "hailDays": 13
-  },
-  {
-    "Century": 1990,
-    "Year": 7,
-    "Temp": 7.3,
-    "PP": 1397,
-    "snowDays": 50,
-    "stormDays": 0,
-    "foggyDays": 59,
-    "hailDays": 33
-  },
-  {
-    "Century": 1990,
-    "Year": 8,
-    "Temp": 6.7,
-    "PP": 1305,
-    "snowDays": 50,
-    "stormDays": 0,
-    "foggyDays": 39,
-    "hailDays": 23
-  },
-  {
-    "Century": 1990,
-    "Year": 9,
-    "Temp": 6.5,
-    "PP": 1432,
-    "snowDays": 58,
-    "stormDays": 1,
-    "foggyDays": 32,
-    "hailDays": 18
-  },
-  {
-    "Century": 2000,
-    "Year": 0,
-    "Temp": 6.6,
-    "PP": 1063,
-    "snowDays": 55,
-    "stormDays": 2,
-    "foggyDays": 20,
-    "hailDays": 15
-  },
-  {
-    "Century": 2000,
-    "Year": 1,
-    "Temp": 6.7,
-    "PP": 1266,
-    "snowDays": 58,
-    "stormDays": 0,
-    "foggyDays": 36,
-    "hailDays": 18
+    "country": "Italy",
+    "year": 2004,
+    "generated": 6134449,
+    "incinerated": 539697,
+    "recycled": 0
   }
 ]
