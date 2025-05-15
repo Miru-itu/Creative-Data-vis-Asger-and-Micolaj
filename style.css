@@ -89,8 +89,16 @@ body {
 /* Canvas styling */
 #canvas {
 	width: 100%;
-	height: 600px;
-	margin-bottom: 20px;
+	max-width: 2400px;
+	margin: 0 auto;
+	min-height: 1200px;
+	background-color: #1E1E1E;
+}
+
+#canvas svg {
+	display: block;
+	width: 100%;
+	height: 100%;
 }
 
 /* Source styling */
@@ -113,4 +121,53 @@ a:hover {
 .source p {
 	margin: 5px 0;
 	font-size: 12px;
+}
+
+@keyframes flowAnimation {
+    0% {
+        stroke-dashoffset: 1800;
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    100% {
+        stroke-dashoffset: 0;
+        opacity: 0.7;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.tooltip {
+    position: absolute;
+    padding: 15px 20px;
+    background: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    border: 3px solid #fff;  /* Increased border width for better visibility */
+    border-radius: 8px;
+    pointer-events: none;
+    font-size: 19px;
+    line-height: 1.5;
+    z-index: 1000;
+    display: none;
+    min-width: 300px;
+    max-width: 500px;
+    transition: border-color 0.3s ease; /* Smooth color transition */
+}
+
+.tooltip strong {
+    font-size: 22px;  /* Larger title text */
+    display: block;
+    margin-bottom: 8px;
+    color: #ffffff;  /* Gold color for headers */
 }

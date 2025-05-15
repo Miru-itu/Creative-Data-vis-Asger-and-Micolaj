@@ -1,53 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Exam project</title>
-<link rel="stylesheet" href="style.css">
+    <title>Exam project</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-	<div class="header">
-		<h1>Hazardous waste in Europe</h1>
-		<h2>2004 - 2016</h2>
-	</div>	
+    <div class="header">
+        <h1>Hazardous waste in Europe</h1>
+        <h2>2004 - 2016</h2>
+    </div>    
 
-	<div id="canvas">
-		<!-- main canvas for data viz -->
-	</div>
+    <div id="canvas">
+        <!-- SVG will be inserted here -->
+    </div>
 
-	<div class="description">
-		<div class="intro">
-			<!-- <p><b>The weather of the Faroe Islands</b>, is a creative data visualisation that seeks to show its viewers that a weather forecast can be translated into so much more than just numbers and statistics. </p>
-			
-			<p>The data visualisation uses weather reports of the Faroe Islands from the year of <b>1973</b> - <b>2001</b>  to create a colorful and creative visualisation, that is intended to become a printed poster. The visualisation contains 29 distinct figures, one figure for each year. Each distinct figure contains the annual percipation, average annual temperature, number of days with storm, hail, snow and fog. Each of the different datapoints are translated into different shapes with different colours.</p>
+    <div class="description">
+        <div class="intro">
+            <!-- ... your intro content ... -->
+        </div>
+        <div class="how-to-read">
+            <!-- ... your how-to-read content ... -->
+        </div>
+        <div id="data-description">
+            <!-- the shapes for the data description -->
+        </div>
+    </div>
 
-			<p>The visualisation seeks to inspire the viewer and show that a weather report can be so much more than just numbers and statistics; it can be translated into art.</p>
+    <div class="source">
+        <!-- ... your source content ... -->
+    </div>
 
-			<p>The visualisation was developed as a part of the final exam at the summer course, <a href="https://learnit.itu.dk/local/coursebase/view.php?ciid=1425">Creative Data Visualisation</a>, taught by <a href="https://annelieberner.com">Annelie Berner</a> at the <a href="https://itu.dk">IT University of Copenhagen</a>.</p> -->
-		</div>
-		<div class="how-to-read">
-			<!-- <h2>How to read the data?</h2>
-			<p>The centuries are placed on the y-axis, ranging from 70s - 00s. Each year in a century is placed on the x-axis, rangin from x0 - x9. For example, the year of 1979 is placed at the top-right corner.</p>
-			
-			<p>Total annual rain or snow percipation. The bigger the circle, the higher the percipation. Ranges from 1055 - 2084 PP. </p>
-			<p>Average annual temperature. Lowest temperature is blue, highest temperature is red. Ranges from 5.4 - 7.4°C. </p>
-			<p>Number of days with storm. Each yellow circle represents a day with storm. Ranges from 0 - 5 days.</p>
-			<p>Number of days with hail. Each light-blue line represents a day with hail. Ranges from 1 - 33 days.</p>
-			<p>Number of days with snow. Each white dot represents a day with snow. Ranges from 7 - 93 days.</p>
-			<p>Number of days with fog. The bigger the cloud, the more foggy days. Rotation of cloud is random. Ranges from 20 - 59 days.</p> -->
-		</div>
-
-		<div id="data-description">
-			<!-- the shapes for the data description -->
-		</div>
-	</div>
-
-	<div class="source">
-		<!-- <p>Data retrieved from <a href="https://en.tutiempo.net/climate/ws-60110.html">TuTiempo.net</a></p>
-		<p>Full source code can be found on <a href="https://github.com/rakulmaria/cdv_summer24/tree/main/examproject">GitHub</a></p>
-		<p>© 2024 Rakul Maria Hjalmarsdóttir Tórgarð</p> -->
-	</div>
-
-	<script src="https://d3js.org/d3.v7.min.js"></script>
-	<script src="script.js"></script>
+    <!-- Remove the D3.js CDN script and add type="module" to your script tag -->
+    <script type="module" src="script.js"></script>
 </body>
 </html>
