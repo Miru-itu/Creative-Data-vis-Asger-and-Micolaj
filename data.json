@@ -379,13 +379,6 @@
   },
   {
     "country": "Belgium",
-    "year": 2007,
-    "generated": 4039063,
-    "incinerated": 0,
-    "recycled": 0
-  },
-  {
-    "country": "Belgium",
     "year": 2006,
     "generated": 4039064,
     "incinerated": 160202,
@@ -793,153 +786,55 @@
     "incinerated": 400,
     "recycled": 0
   },
-  {
+    {
     "country": "Slovenia",
     "year": 2016,
     "generated": 123617,
-    "incinerated": 123617,
+    "incinerated": 9887,
     "recycled": 51151
   },
   {
     "country": "Slovenia",
     "year": 2014,
     "generated": 155229,
-    "incinerated": 155229,
+    "incinerated": 9965,
     "recycled": 69613
   },
   {
     "country": "Slovenia",
     "year": 2012,
     "generated": 133334,
-    "incinerated": 133334,
+    "incinerated": 8658,
     "recycled": 48005
   },
   {
     "country": "Slovenia",
     "year": 2010,
     "generated": 117180,
-    "incinerated": 117180,
+    "incinerated": 12615,
     "recycled": 45643
   },
   {
     "country": "Slovenia",
     "year": 2008,
     "generated": 152744,
-    "incinerated": 152744,
+    "incinerated": 11112,
     "recycled": 0
   },
   {
     "country": "Slovenia",
     "year": 2006,
     "generated": 116405,
-    "incinerated": 116405,
+    "incinerated": 13073,
     "recycled": 0
   },
   {
     "country": "Slovenia",
     "year": 2004,
     "generated": 107906,
-    "incinerated": 107906,
+    "incinerated": 11586,
     "recycled": 0
   },
-    {
-      "country": "Sweden",
-      "year": 2016,
-      "generated": 2379232,
-      "incinerated": 210477,
-      "recycled": 385016
-    },
-    {
-      "country": "Sweden",
-      "year": 2014,
-      "generated": 2568154,
-      "incinerated": 102739,
-      "recycled": 411036
-    },
-    {
-      "country": "Sweden",
-      "year": 2012,
-      "generated": 2696749,
-      "incinerated": 42347,
-      "recycled": 454933
-    },
-    {
-      "country": "Sweden",
-      "year": 2010,
-      "generated": 2527760,
-      "incinerated": 85830,
-      "recycled": 245358
-    },
-    {
-      "country": "Sweden",
-      "year": 2008,
-      "generated": 2063389,
-      "incinerated": 86805,
-      "recycled": 0
-    },
-    {
-      "country": "Sweden",
-      "year": 2006,
-      "generated": 2654038,
-      "incinerated": 103455,
-      "recycled": 0
-    },
-    {
-      "country": "Sweden",
-      "year": 2004,
-      "generated": 1624770,
-      "incinerated": 71120,
-      "recycled": 0
-    },
-    {
-      "country": "Turkey",
-      "year": 2016,
-      "generated": 5550817,
-      "incinerated": 57814,
-      "recycled": 696322
-    },
-    {
-      "country": "Turkey",
-      "year": 2014,
-      "generated": 3432426,
-      "incinerated": 33329,
-      "recycled": 437731
-    },
-    {
-      "country": "Turkey",
-      "year": 2012,
-      "generated": 3988200,
-      "incinerated": 40559,
-      "recycled": 555754
-    },
-    {
-      "country": "Turkey",
-      "year": 2010,
-      "generated": 3225786,
-      "incinerated": 27331,
-      "recycled": 200627
-    },
-    {
-      "country": "Turkey",
-      "year": 2008,
-      "generated": 1018283,
-      "incinerated": 56947,
-      "recycled": 0
-    },
-    {
-      "country": "Turkey",
-      "year": 2006,
-      "generated": 10796,
-      "incinerated": 28251,
-      "recycled": 0
-    },
-    {
-      "country": "Turkey",
-      "year": 2004,
-      "generated": 997579,
-      "incinerated": 191901,
-      "recycled": 0
-    },
     {
       "country": "Hungary",
       "year": 2016,

@@ -10,8 +10,8 @@
 
 /* Body styling */
 body {
-	font-family: Georgia, serif;
-	background-color: #212529;
+	font-family: 'Noto Sans', sans-serif;
+	background-color: #1E1E1E;  /* Keep only the grey background */
 	color: #fff;
 	line-height: 1.6;
 	padding: 20px;
@@ -28,13 +28,20 @@ body {
 	border-color: #fff;
 }
 
+.header h1, .header h2 {
+    font-family: 'Oswald', sans-serif;
+    color: #ffffff;
+    text-align: center;
+    margin: 0;
+}
+
 .header h1 {
-	font-size: 2.5em;
+	font-size: 32px;
 	margin-bottom: 10px;
 }
 
 .header h2 {
-	font-size: 1.5em;
+	font-size: 24px;
 	font-weight: 300;
 }
 
@@ -92,7 +99,7 @@ body {
 	max-width: 2400px;
 	margin: 0 auto;
 	min-height: 1200px;
-	background-color: #1E1E1E;
+	background-color: #1E1E1E;  /* Make sure canvas matches body */
 }
 
 #canvas svg {
@@ -125,11 +132,8 @@ a:hover {
 
 @keyframes flowAnimation {
     0% {
-        stroke-dashoffset: 1800;
+        stroke-dashoffset: 100%;
         opacity: 0;
-    }
-    50% {
-        opacity: 0.7;
     }
     100% {
         stroke-dashoffset: 0;
@@ -170,4 +174,26 @@ a:hover {
     display: block;
     margin-bottom: 8px;
     color: #ffffff;  /* Gold color for headers */
+}
+
+@keyframes flowFirstPhase {
+    0% {
+        stroke-dashoffset: 40%;
+        opacity: 0;
+    }
+    100% {
+        stroke-dashoffset: 0;
+        opacity: 0.7;
+    }
+}
+
+@keyframes flowSecondPhase {
+    0% {
+        stroke-dashoffset: 40%;
+        opacity: 0;
+    }
+    100% {
+        stroke-dashoffset: 0;
+        opacity: 0.7;
+    }
 }

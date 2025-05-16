@@ -12,7 +12,7 @@ const SETTINGS = {
         top: 100,
         right: 300,
         bottom: 100,
-        left: 300
+        left: 400  // Increased to accommodate country labels
     },
     
     // Node settings
@@ -22,13 +22,9 @@ const SETTINGS = {
     nodeMinHeight: 20,  // Add minimum node height setting
     
     // Text settings
-    fonts: {
-        heading: "Oswald",
-        text: "Noto Sans"
-    },
     fontSize: {
         labels: 22,
-        title: 32,
+        title: 24,
         subtitle: 18
     },
     
@@ -63,13 +59,6 @@ const SETTINGS = {
         lineHeight: 2,
         margin: 100,  // Add margin between timeline and Sankey
         years: [2004, 2006, 2008, 2010, 2012, 2014, 2016]
-    },
-    
-    // Header settings
-    header: {
-        text: "Hazardous waste in Europe",
-        yOffset: 100,  // Increased from 50 to 100 for more space
-        fontSize: 32
     }
 };
 
@@ -169,10 +158,9 @@ function createSankeyDiagram(data, year) {
         .attr("x", d => timelineScale(d))
         .attr("y", SETTINGS.timeline.height / 2 - SETTINGS.timeline.circleRadius * 2) // Move above circles
         .attr("text-anchor", "middle")
-        .attr("fill", SETTINGS.colors.text)
+        .attr("fill", "#ffffff")
         .attr("font-size", "22px") // Increased font size
         .attr("font-weight", "bold") // Make text bold
-        .attr("font-family", SETTINGS.fonts.heading)
         .text(d => d);
 
     // Create nodes dynamically
@@ -182,10 +170,10 @@ function createSankeyDiagram(data, year) {
             ...countries.map(country => ({ name: country })),
             // Intermediate nodes (one per country)
             ...countries.map(country => ({ name: country + "_generated" })),
-            // Target nodes (waste types) - Environmental Load first
-            { name: "Environmental Load" },
+            // Target nodes (waste types)
             { name: "Incinerated" },
-            { name: "Recycled" }
+            { name: "Recycled" },
+            { name: "Environmental Load" }
         ],
         links: []
     };
@@ -194,7 +182,7 @@ function createSankeyDiagram(data, year) {
     yearData.forEach(d => {
         const countryIndex = sankeyData.nodes.findIndex(n => n.name === d.country);
         const generatedIndex = countries.length + countries.findIndex(c => c === d.country);
-        const targetStartIndex = countries.length * 2;
+        const targetStartIndex = countries.length * 2; // Index where final target nodes start
         
         if (countryIndex !== -1) {
             // Link from country to its generated node
@@ -202,33 +190,27 @@ function createSankeyDiagram(data, year) {
                 { source: countryIndex, target: generatedIndex, value: d.generated }
             );
             
-            // Links from generated to waste types - Environmental Load first
+            // Links from generated to waste types
             sankeyData.links.push(
+                { source: generatedIndex, target: targetStartIndex, value: d.incinerated },
+                { source: generatedIndex, target: targetStartIndex + 1, value: d.recycled },
                 { 
                     source: generatedIndex, 
-                    target: targetStartIndex, 
-                    value: d.generated - d.incinerated - (d.recycled || 0) // Account for missing recycled data
-                },
-                { source: generatedIndex, target: targetStartIndex + 1, value: d.incinerated }
+                    target: targetStartIndex + 2, 
+                    value: d.generated - d.incinerated - d.recycled // Environmental load
+                }
             );
-
-            // Only add recycling link if the value is not 0
-            if (d.recycled && d.recycled > 0) {
-                sankeyData.links.push(
-                    { source: generatedIndex, target: targetStartIndex + 2, value: d.recycled }
-                );
-            }
         }
     });
 
-    // Update the sankeyGenerator configuration
+    // Modify the Sankey layout for better spacing
     const sankeyGenerator = sankey()
         .nodeWidth(SETTINGS.nodeWidth)
         .nodePadding(SETTINGS.nodePadding)
         .extent([
             [
                 SETTINGS.margin.left, 
-                SETTINGS.margin.top + SETTINGS.timeline.height + SETTINGS.header.yOffset + SETTINGS.header.fontSize + SETTINGS.timeline.margin
+                SETTINGS.margin.top + SETTINGS.timeline.height + SETTINGS.timeline.margin  // Add extra space below timeline
             ], 
             [
                 width - SETTINGS.margin.right, 
@@ -236,18 +218,11 @@ function createSankeyDiagram(data, year) {
             ]
         ])
         .nodeSort((a, b) => {
-            // Sort end nodes to the right
-            if (["Incinerated", "Recycled", "Environmental Load"].includes(a.name) ||
-                ["Incinerated", "Recycled", "Environmental Load"].includes(b.name)) {
-                return 0;
-            }
-            
-            // Remove _generated suffix for comparison
-            const nameA = a.name.replace("_generated", "");
-            const nameB = b.name.replace("_generated", "");
-            
-            // Keep alphabetical order for countries and their generated nodes
-            return d3.ascending(nameA, nameB);
+            // Keep waste types on the right
+            const isWasteType = name => ["Generated", "Incinerated", "Recycled"].includes(name);
+            if (isWasteType(a.name) && !isWasteType(b.name)) return 1;
+            if (!isWasteType(a.name) && isWasteType(b.name)) return -1;
+            return d3.ascending(a.name, b.name);
         });
 
     const sankeyLayout = sankeyGenerator(sankeyData);
@@ -260,24 +235,21 @@ function createSankeyDiagram(data, year) {
         .attr("d", sankeyLinkHorizontal())
         .attr("fill", "none")
         .attr("stroke", d => {
+            // Links from country to generated should be purple
             if (!d.source.name.includes("_generated")) return SETTINGS.colors.generated;
+            
+            // Links from generated nodes to end nodes get target colors
             if (d.target.name === "Incinerated") return SETTINGS.colors.incinerated;
             if (d.target.name === "Recycled") return SETTINGS.colors.recycled;
             if (d.target.name === "Environmental Load") return SETTINGS.colors.generated;
-            return SETTINGS.colors.generated;
+            
+            return SETTINGS.colors.generated; // Default fallback
         })
         .attr("stroke-width", d => Math.max(SETTINGS.linkStrokeWidth, d.width))
         .style("stroke-dasharray", function() {
-            return this.getTotalLength() + " " + this.getTotalLength();
+            return this.getTotalLength() + " " + this.getTotalLength();  // Match path length
         })
-        .style("animation", (d, i) => {
-            // First phase: all country to generated links animate together
-            if (!d.source.name.includes("_generated")) {
-                return `flowFirstPhase 1.2s ease-out forwards`; // Try 1.2s instead of 0.8s
-            }
-            // Second phase: staggered animation for links to end nodes
-            return `flowSecondPhase 1.5s ease-in-out ${1500 + i * 100}ms forwards`; // Increased delay to 1500ms
-        })
+        .style("animation", (d, i) => `flowAnimation 3s ease-in-out ${i * 100}ms forwards`)  // Increased duration and delay
         .attr("opacity", 0);
 
     // Draw the nodes with animation
@@ -315,7 +287,7 @@ function createSankeyDiagram(data, year) {
         .join("text")
         .attr("x", d => {
             // Only for country nodes (not waste types)
-            if (!["Generated", "Incinerated", "Recycled", "Environmental Load"].includes(d.name)) {
+            if (!["Generated", "Incinerated", "Recycled"].includes(d.name)) {
                 return d.x0 - 10; // Position text 10 pixels to the left of node
             }
             return d.x1 + 10; // Keep waste type labels on the right
@@ -324,29 +296,20 @@ function createSankeyDiagram(data, year) {
         .attr("dy", "0.35em")
         .attr("text-anchor", d => {
             // Right-align country names, left-align waste type names
-            return !["Generated", "Incinerated", "Recycled", "Environmental Load"].includes(d.name) ? "end" : "start";
+            return !["Generated", "Incinerated", "Recycled"].includes(d.name) ? "end" : "start";
         })
         .text(d => {
-            // Remove _generated suffix and values for intermediate nodes
-            if (d.name.includes("_generated")) return "";
-            
-            // Remove values for country names
-            if (!["Incinerated", "Recycled", "Environmental Load"].includes(d.name)) {
-                return d.name;
-            }
-            
-            // Keep just the type name for end nodes
-            return d.name;
+            const value = d.value || 0;
+            const formatted = value >= 1e6 
+                ? `${(value/1e6).toFixed(1)}M` 
+                : value >= 1e3 
+                    ? `${(value/1e3).toFixed(1)}K` 
+                    : value;
+            return `${d.name} (${formatted})`;
         })
         .attr("fill", SETTINGS.colors.text)
         .attr("font-size", `${SETTINGS.fontSize.labels}px`)
         .attr("font-weight", "bold")
-        .attr("font-family", d => {
-            // Use heading font for end nodes, text font for countries
-            return ["Incinerated", "Recycled", "Environmental Load"].includes(d.name) 
-                ? SETTINGS.fonts.heading 
-                : SETTINGS.fonts.text;
-        })
         .style("animation", (d, i) => `fadeIn 0.8s ease-out ${i * 100}ms forwards`)
         .attr("opacity", 0);
 
@@ -373,68 +336,47 @@ function createSankeyDiagram(data, year) {
         };
     };
 
-    // Update the getDetailedInfo function
+    // Function to get detailed information
     const getDetailedInfo = d => {
-        if (["Incinerated", "Recycled", "Environmental Load"].includes(d.name)) {
-            // For end nodes (right side)
+        if (["Generated", "Incinerated", "Recycled"].includes(d.name)) {
+            // For waste type nodes
             const sources = sankeyLayout.links
                 .filter(link => link.target === d)
                 .sort((a, b) => b.value - a.value)
-                .map(link => {
-                    const country = link.source.name.replace("_generated", "");
-                    return `${country}: ${formatNumber(link.value)}`;
-                })
+                .map(link => `${link.source.name}: ${formatNumber(link.value)}`)
                 .join('<br>');
             
             return `<strong>${d.name}</strong><br>
                     Total: ${formatNumber(d.value)}<br>
                     <br>Sources (ordered by amount):<br>${sources}`;
         } else {
-            // For country nodes (left side) and generated nodes (middle)
-            const countryName = d.name.replace("_generated", "");
-            const data = yearData.find(item => item.country === countryName);
+            // For country nodes or links
+            const data = d.source ? yearData.find(item => item.country === d.source.name) : 
+                                  yearData.find(item => item.country === d.name);
             
-            if (!data) return ""; // Guard clause for missing data
+            const percentages = calculatePercentages(data);
             
-            const environmentalLoad = data.generated - data.incinerated - (data.recycled || 0);
-            const envLoadPercent = ((environmentalLoad / data.generated) * 100).toFixed(1);
-            const incineratedPercent = ((data.incinerated / data.generated) * 100).toFixed(1);
-            const recycledPercent = (((data.recycled || 0) / data.generated) * 100).toFixed(1);
-            
-            return `<strong>${countryName}</strong><br>
+            return `<strong>${d.source ? d.source.name : d.name}</strong><br>
                     Generated: ${formatNumber(data.generated)}<br>
-                    Environmental Load: ${formatNumber(environmentalLoad)} (${envLoadPercent}%)<br>
-                    Incinerated: ${formatNumber(data.incinerated)} (${incineratedPercent}%)<br>
-                    ${data.recycled ? `Recycled: ${formatNumber(data.recycled)} (${recycledPercent}%)<br>` : ''}`;
+                    Incinerated: ${formatNumber(data.incinerated)} (${percentages.incinerated}% of generated)<br>
+                    Recycled: ${formatNumber(data.recycled)} (${percentages.recycled}% of generated)`;
         }
     };
 
-    // Update the updateTooltip function
+    // Update tooltip function to include color
     const updateTooltip = (element, event, d) => {
         let borderColor;
-        
-        if (d.source) {
+        if (["Generated", "Incinerated", "Recycled"].includes(d.name)) {
+            // For waste type nodes
+            borderColor = SETTINGS.colors[d.name.toLowerCase()];
+        } else if (d.source) {
             // For links
-            if (!d.source.name.includes("_generated")) {
-                borderColor = SETTINGS.colors.generated; // Purple for country to generated
-            } else if (d.target.name === "Environmental Load") {
-                borderColor = SETTINGS.colors.generated; // Purple for environmental load
-            } else if (d.target.name === "Incinerated") {
-                borderColor = SETTINGS.colors.incinerated; // Orange for incinerated
-            } else if (d.target.name === "Recycled") {
-                borderColor = SETTINGS.colors.recycled; // Green for recycled
-            }
+            borderColor = d.target.name === "Generated" ? SETTINGS.colors.generated :
+                         d.target.name === "Incinerated" ? SETTINGS.colors.incinerated :
+                         SETTINGS.colors.recycled;
         } else {
-            // For all nodes
-            if (d.name.includes("_generated") || d.name === "Environmental Load") {
-                borderColor = SETTINGS.colors.generated; // Purple for generated and environmental load
-            } else if (d.name === "Incinerated") {
-                borderColor = SETTINGS.colors.incinerated;
-            } else if (d.name === "Recycled") {
-                borderColor = SETTINGS.colors.recycled;
-            } else {
-                borderColor = SETTINGS.colors.generated; // Purple for country nodes
-            }
+            // For country nodes
+            borderColor = SETTINGS.colors.countries;
         }
 
         tooltip.style("display", "block")
@@ -443,23 +385,6 @@ function createSankeyDiagram(data, year) {
             .style("left", (event.pageX + 10) + "px")
             .style("top", (event.pageY - 10) + "px");
     };
-
-    // Add header text
-    const header = svg.append("g")
-        .attr("class", "header");  // Remove the transform from here
-
-    header.append("text")
-        .attr("x", SETTINGS.width / 2)  // Center based on total width
-        .attr("y", SETTINGS.margin.top + SETTINGS.timeline.height + SETTINGS.header.yOffset)  // Move y position here
-        .attr("text-anchor", "middle")
-        .attr("dominant-baseline", "middle")  // Add this for vertical centering
-        .attr("fill", SETTINGS.colors.text)
-        .attr("font-size", `${SETTINGS.header.fontSize}px`)
-        .attr("font-weight", "bold")
-        .attr("font-family", SETTINGS.fonts.heading)
-        .text(`${SETTINGS.header.text} ${year}`)
-        .style("animation", "fadeIn 0.8s ease-out forwards")
-        .attr("opacity", 0);
 
     // Apply hover effects to nodes
     svg.selectAll("rect")
@@ -470,57 +395,14 @@ function createSankeyDiagram(data, year) {
         })
         .on("mouseout", () => tooltip.style("display", "none"));
 
-    // Replace just the path hover events at the bottom of createSankeyDiagram function
+    // Apply hover effects to links
     svg.selectAll("path")
-        .on("mouseover", function(event, d) {
-            // Highlight the hovered link
-            d3.select(this)
-                .style("opacity", 1)
-                .style("stroke-opacity", 1);
-            
-            // Get the country data and border color based on link type
-            const countryName = d.source.name.replace("_generated", "");
-            const data = yearData.find(item => item.country === countryName);
-            
-            // Determine border color based on link target
-            let borderColor = SETTINGS.colors.generated; // Default purple
-            if (d.source.name.includes("_generated")) {
-                if (d.target.name === "Incinerated") {
-                    borderColor = SETTINGS.colors.incinerated;
-                } else if (d.target.name === "Recycled") {
-                    borderColor = SETTINGS.colors.recycled;
-                }
-            }
-            
-            if (data) {
-                const environmentalLoad = data.generated - data.incinerated - (data.recycled || 0);
-                const envLoadPercent = ((environmentalLoad / data.generated) * 100).toFixed(1);
-                const incineratedPercent = ((data.incinerated / data.generated) * 100).toFixed(1);
-                const recycledPercent = (((data.recycled || 0) / data.generated) * 100).toFixed(1);
-                
-                tooltip.style("display", "block")
-                    .style("border-color", borderColor)
-                    .html(`<strong>${countryName}</strong><br>
-                           Generated: ${formatNumber(data.generated)}<br>
-                           Environmental Load: ${formatNumber(environmentalLoad)} (${envLoadPercent}%)<br>
-                           Incinerated: ${formatNumber(data.incinerated)} (${incineratedPercent}%)<br>
-                           ${data.recycled ? `Recycled: ${formatNumber(data.recycled)} (${recycledPercent}%)<br>` : ''}`)
-                    .style("left", (event.pageX + 10) + "px")
-                    .style("top", (event.pageY - 10) + "px");
-            }
-        })
+        .on("mouseover", (event, d) => updateTooltip("link", event, d))
         .on("mousemove", (event) => {
             tooltip.style("left", (event.pageX + 10) + "px")
                 .style("top", (event.pageY - 10) + "px");
         })
-        .on("mouseout", function() {
-            // Reset the link opacity
-            d3.select(this)
-                .style("opacity", SETTINGS.opacity.links)
-                .style("stroke-opacity", SETTINGS.opacity.links);
-            
-            tooltip.style("display", "none");
-        });
+        .on("mouseout", () => tooltip.style("display", "none"));
 }
 
 // Load and process the data
