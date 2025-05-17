@@ -7,7 +7,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>Europe’s Toxic Trail</h1>
+        <h1>Europe's Toxic Trail</h1>
         <h2>2004 - 2016</h2>
     </div>    
 
@@ -17,21 +17,45 @@
 
     <div class="description">
         <div class="intro">
-            <!-- ... your intro content ... -->
+            <h3>How to read the visualization</h3>
+            <p>The visualization is a Sankey diagram built using flows and nodes for a sample of European countries. Each flow represents the amount of hazardous waste generated, and the thickness of the flow reflects how much waste was produced in tonnes.</p>
+            
+            <p>At the center of the diagram, all country flows meet at nodes, where the waste splits into three color coded categories, <strong>Recycled</strong>: green, <strong>Incinerated</strong>: orange and <strong>Environmental Load</strong>: Purple. These are collected into mutual nodes that present total amount of waste.</p>
+            
+            <p>You can hover over the flows and nodes to see detailed data for each country and category. At the top of the visualization, you can select different years from the timeline (2004 to 2016) to explore how hazardous waste patterns change over time.</p>
+           
+            <h3>About Hazardous Waste in Europe</h3>
+            <p>This visualization was created to shed light on the invisible burden of hazardous waste in Europe, making national contributions visible, comparable, and open for reflection.</p>
+
+            <p>This visualization presents data on hazardous waste from European countries between 2004 and 2016, based on official records from the United Nations Statistics Division (UNdata). It shows the amount of hazardous waste that was generated, incinerated, and recycled, measured in tonnes and reported every other year. The data is presented biennially (every second year), meaning each data point represents one year, not a two-year average. Due to limitations in international reporting standards, recycling data is only available from 2010 and onwards.</p>
+            
+            <p>This is largely due to changes in international/EU reporting practices around that time. Under the original EU Waste Statistics Regulation, countries did not have to report a separate “hazardous waste recycled” figure, instead all recycling operations were often reported as a single aggregate.</p>
+
+            <p>Hazardous waste includes materials that are dangerous to human health or the environment, such as industrial chemicals, medical waste, or heavy metals. These types of waste require specialized handling and disposal, but much of this process happens out of public view.</p>
+            
+            
+            
         </div>
-        <div class="how-to-read">
-            <!-- ... your how-to-read content ... -->
-        </div>
-        <div id="data-description">
-            <!-- the shapes for the data description -->
+        <div class="visual-examples">
+            <div class="example">
+                <img src="images/wasteland.png" alt="Industrial waste management facility">
+            </div>
+            <div class="example">
+                <img src="images/wastepile.png" alt="Recycling facility">
+            </div>
         </div>
     </div>
 
     <div class="source">
-        <!-- ... your source content ... -->
+        <p>Data sources from the United Nations Statistics Division (UNdata):</p>
+        <p>
+            <a href="https://data.un.org/Data.aspx?d=ENV&f=variableID%3A2830" target="_blank">Generated Hazardous Waste</a> |
+            <a href="https://data.un.org/Data.aspx?d=ENV&f=variableID%3A2574" target="_blank">Incinerated Hazardous Waste</a> |
+            <a href="https://data.un.org/Data.aspx?d=ENV&f=variableID%3A2573" target="_blank">Recycled Hazardous Waste</a>
+        </p>
+        <p>Created by Asger and Micolaj</p>
     </div>
 
-    <!-- Remove the D3.js CDN script and add type="module" to your script tag -->
     <script type="module" src="script.js"></script>
 </body>
 </html>

@@ -17,15 +17,15 @@ body {
 	padding: 20px;
 }
 
-/* Header styling */
+/* Header styling - keep the borders */
 .header {
-	text-align: center;
-	padding: 20px 0;
-	color: #fff;
-	margin-bottom: 20px;
-	border-bottom-style: solid;
-	border-top-style: solid;
-	border-color: #fff;
+    text-align: center;
+    padding: 20px 0;
+    color: #fff;
+    margin-bottom: 20px;
+    border-bottom-style: solid;
+    border-top-style: solid;
+    border-color: #fff;
 }
 
 .header h1, .header h2 {
@@ -45,26 +45,42 @@ body {
 	font-weight: 300;
 }
 
-/* Description styling */
+/* Description styling - remove borders */
 .description {
-	display: flex;
-	justify-content: space-between;
-	margin-bottom: 20px;
-	border-top-style: solid;
-	border-bottom-style: solid;
-	border-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
 }
 
 .description .intro,
 .description .how-to-read,
 .description #data-description {
-	padding: 50px;
-	border-radius: 5px;
-	margin-right: 20px;
+    padding: 50px;
+    border-radius: 5px;
+    margin-right: 20px;
+    border: none;  /* Explicitly remove any borders */
+}
+
+.description .intro h3 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 26px;
+    color: #ffffff;
+    margin-bottom: 30px;
 }
 
 .description .intro p {
-	margin-bottom: 20px; /* Adjust this value to change the spacing between paragraphs */
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.description .intro p strong {
+    font-family: 'Oswald', sans-serif;
+    color: #ffffff;
+    font-weight: 500;
 }
 
 .description .intro {
@@ -93,21 +109,63 @@ body {
 	margin-right: 0;
 }
 
+.visual-examples {
+    flex: 1.2;  /* Keep the width ratio */
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;  /* Slightly reduced gap */
+    height: 100%;  /* Fill available height */
+}
+
+.example {
+    position: relative;
+    width: 100%;
+    height: 330px;  /* Reduced from 370px */
+    margin-bottom: 20px;
+}
+
+.example img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+/* Remove margin from last image */
+.example:last-child {
+    margin-bottom: 0;
+}
+
+/* Remove duplicate visual-examples definition */
+.visual-examples {
+    display: flex;
+    justify-content: space-between; /* Changed from center to space-between */
+}
+
+.caption {
+    font-size: 14px;
+    color: #fff;
+    text-align: center;
+    font-style: italic;
+}
+
 /* Canvas styling */
 #canvas {
-	width: 100%;
-	max-width: 2400px;
-	margin: 0 auto;
-	min-height: 1200px;
-	background-color: #1E1E1E;
-	transform: scale(0.8);
-	transform-origin: top center;
+    width: 100%;
+    max-width: 2400px;
+    margin: 0 auto;
+    min-height: 600px;  /* Reduced from 1200px */
+    background-color: #1E1E1E;
+    transform: scale(0.8);
+    transform-origin: top center;
+    margin-bottom: -500px; /* Add negative margin to pull up the content below */
 }
 
 #canvas svg {
-	display: block;
-	width: 100%;
-	height: 100%;
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 /* Source styling */
@@ -116,15 +174,17 @@ body {
 	padding: 10px;
 	color: #fff;
 	margin-top: 20px;
+	font-family: 'Noto Sans', sans-serif;
 }
 
-/* Link styling */
-a {
+.source a {
 	color: #fff;
+	text-decoration: none;
+	transition: color 0.3s ease;
 }
 
-a:hover {
-	color: pink;
+.source a:hover {
+	color: #7570b3;  /* Using the purple from your color scheme */
 }
 
 .source p {
@@ -198,4 +258,50 @@ a:hover {
         stroke-dashoffset: 0;
         opacity: 0.7;
     }
+}
+
+/* Typography base settings */
+body {
+    font-family: 'Noto Sans', sans-serif;
+    line-height: 1.6;
+}
+
+/* Headings */
+h1, h2, h3, 
+.header h1, 
+.header h2,
+.description h3 {
+    font-family: 'Oswald', sans-serif;
+    color: #ffffff;
+}
+
+/* Description text */
+.description .intro p,
+.visual-examples .caption,
+.source p {
+    font-family: 'Noto Sans', sans-serif;
+}
+
+/* Tooltip styling */
+.tooltip {
+    font-family: 'Noto Sans', sans-serif;
+}
+
+.tooltip strong {
+    font-family: 'Oswald', sans-serif;
+}
+
+/* Legend text */
+.legend text {
+    font-family: 'Oswald', sans-serif;
+}
+
+/* Timeline labels */
+.timeline text {
+    font-family: 'Oswald', sans-serif;
+}
+
+/* Node labels */
+#canvas text {
+    font-family: 'Oswald', sans-serif;
 }
