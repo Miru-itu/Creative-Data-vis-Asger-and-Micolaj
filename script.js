@@ -159,6 +159,7 @@ function createSankeyDiagram(data, year) {
         }
     });
 
+    //Fjern mus effekt
     circles.on("mouseout.timeline", function(event, d) {
         if (d !== year) {
             d3.select(this)
