@@ -1,16 +1,13 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 import { sankey, sankeyLinkHorizontal } from "https://cdn.jsdelivr.net/npm/d3-sankey@0.12/+esm";
 
-/** 
- * Configuration object for the Sankey diagram visualization
- * Controls all visual and behavioral aspects of the diagram
- */
-const SETTINGS = {
-    // Core dimensions of the visualization
+//alle voriabler
+const Variabler = {
+    //højde og bredde for sankey
     width: 2500,
     height: 2000,
-    
-    // Spacing around the diagram
+
+    // Spacing rundt om sankey
     margin: { 
         top: 100,
         right: 300,
@@ -18,44 +15,48 @@ const SETTINGS = {
         left: 300
     },
     
-    // Node appearance and spacing
-    nodeWidth: 35,        // Width of each node in the diagram
-    countrySpacing: 30,   // Vertical space between country nodes
-    nodePadding: 63,      // Vertical padding between node connections
-    nodeMinHeight: 20,    // Minimum height for small nodes to ensure visibility
+    // Variabler for Nodes
+    nodes: {
+        width: 35,         
+        spacing: 30,      
+        padding: 63,       
+        minHeight: 20       
+    },
     
-    // Typography configuration
+    // Typography for header og text
     fonts: {
-        heading: "Oswald",    // Used for titles and key labels
-        text: "Noto Sans"     // Used for general text and country names
+        heading: "Oswald",    
+        text: "Noto Sans"     
     },
+    
+    // Font størrelse
     fontSize: {
-        labels: 26,           // Size for node labels
-        title: 36,           // Size for main title
-        subtitle: 22         // Size for secondary text
+        labels: 26,           
+        title: 36,          
+        subtitle: 22         
     },
     
-    // Color scheme
+    // Farve tema
     colors: {
-        generated: "#7570b3",     // Purple - Used for country nodes and generated waste
-        incinerated: "#d95f02",   // Orange - Used for incinerated waste
-        recycled: "#1b9e77",      // Green - Used for recycled waste
-        countries: "#7570b3",     // Purple - Matches generated for consistency
-        text: "#ffffff",          // White - All text elements
-        stroke: "#000000"         // Black - Node borders
+        generated: "#7570b3",     // Lilla
+        incinerated: "#d95f02",   // Orange 
+        recycled: "#1b9e77",      // Grøn
+        countries: "#7570b3",     // Lilla igen
+        text: "#ffffff",          // Hvid
+        stroke: "#000000"         // Sort
     },
     
-    // Flow and node transparency
+    // transparency på stregerne
     opacity: {
-        links: 0.7,   // Transparency of connection flows
-        nodes: 1      // Nodes are fully opaque
+        links: 0.7,   
+        nodes: 1  //bruges som sådan ikke fordi den er 1   
     },
     
-    // Default year and flow settings
+    //årstal, defaulter på tallet under
     selectedYear: 2016,
-    linkStrokeWidth: 1,    // Base width of connection flows
+    linkStrokeWidth: 1,    // Gør linjerne tykkere
 
-    // Timeline configuration
+    // Timeline variabler
     timeline: {
         height: 50,
         yOffset: 200,
@@ -65,92 +66,96 @@ const SETTINGS = {
         years: [2004, 2006, 2008, 2010, 2012, 2014, 2016]
     },
     
-    // Header and annotation settings
+    // Header og annotation Variabler
     header: {
         text: "Hazardous waste in Europe",
         yOffset: 100,
         fontSize: 36
     },
     annotation: {
-        x: -15,           // Horizontal position offset
-        y: -430,          // Vertical position offset
-        fontSize: 28      // Size of annotation text
+        x: -15,         
+        y: -430,          
+        fontSize: 28      
     }
 };
 
-/**
- * Creates a Sankey diagram visualizing hazardous waste flow for a specific year
- * @param {Array} data - The complete dataset for all years
- * @param {number} year - The specific year to visualize
- */
+
+// Load json data, og kald createSankeyDiagram
+d3.json("data.json").then(function(rawData) {
+    createSankeyDiagram(rawData, Variabler.selectedYear);
+}).catch(error => {
+    console.error("Error loading or processing data:", error);
+});
+
+//funktionen der skaber sankey diagrammet
 function createSankeyDiagram(data, year) {
-    // Filter data for the selected year
+    // Filter data år
     const yearData = data.filter(d => d.year === year);
     
-    // Get unique countries
+    // Opstil countries
     const countries = [...new Set(yearData.map(d => d.country))].filter(Boolean);
     
-    // Adjust height based on number of countries
-    const height = Math.max(SETTINGS.height, countries.length * SETTINGS.countrySpacing);
-    const width = SETTINGS.width;
+    // højde og bredde for sankey
+    const height = Math.max(Variabler.height, countries.length * Variabler.nodes.spacing);
+    const width = Variabler.width;
 
-    // Clear previous diagram if exists
+    // Clear sankey
     d3.select("#canvas").selectAll("svg").remove();
 
-    // Update SVG dimensions to accommodate timeline
+    // Opdater svg
     const svg = d3.select("#canvas")
         .append("svg")
-        .attr("width", width * 1.25)  // Increase the container size by 1.25 (inverse of 0.8)
-        .attr("height", (height + SETTINGS.timeline.yOffset + SETTINGS.timeline.height) * 1.25)
-        .attr("viewBox", [0, 0, width, height + SETTINGS.timeline.yOffset + SETTINGS.timeline.height])
+        .attr("width", width * 1.25)  
+        .attr("height", (height + Variabler.timeline.yOffset + Variabler.timeline.height) * 1.25)
+        .attr("viewBox", [0, 0, width, height + Variabler.timeline.yOffset + Variabler.timeline.height])
         .attr("style", "max-width: 100%; height: auto;");
 
-    // Create timeline group (move it above Sankey)
+    // Timeline over sankey
     const timelineG = svg.append("g")
         .attr("class", "timeline")
-        .attr("transform", `translate(0, ${SETTINGS.margin.top})`); // Move to top margin
+        .attr("transform", `translate(0, ${Variabler.margin.top})`); 
 
-    // Create scale for timeline
+    //  scale for timelinen
     const timelineScale = d3.scaleLinear()
-        .domain([Math.min(...SETTINGS.timeline.years), Math.max(...SETTINGS.timeline.years)])
-        .range([SETTINGS.margin.left + 100, width - SETTINGS.margin.right - 100]);
+        .domain([Math.min(...Variabler.timeline.years), Math.max(...Variabler.timeline.years)])
+        .range([Variabler.margin.left + 100, width - Variabler.margin.right - 100]);
 
-    // Draw lines between years (but not through circles)
-    for (let i = 0; i < SETTINGS.timeline.years.length - 1; i++) {
-        const x1 = timelineScale(SETTINGS.timeline.years[i]);
-        const x2 = timelineScale(SETTINGS.timeline.years[i + 1]);
-        const circleRadius = SETTINGS.timeline.circleRadius;
+    // Linjer immellem cirklerne for timelinen
+    for (let i = 0; i < Variabler.timeline.years.length - 1; i++) {
+        const x1 = timelineScale(Variabler.timeline.years[i]);
+        const x2 = timelineScale(Variabler.timeline.years[i + 1]);
+        const circleRadius = Variabler.timeline.circleRadius;
         
         timelineG.append("line")
-            .attr("x1", x1 + circleRadius)  // Start after first circle
-            .attr("x2", x2 - circleRadius)  // End before second circle
-            .attr("y1", SETTINGS.timeline.height / 2)
-            .attr("y2", SETTINGS.timeline.height / 2)
+            .attr("x1", x1 + circleRadius) 
+            .attr("x2", x2 - circleRadius)  
+            .attr("y1", Variabler.timeline.height / 2)
+            .attr("y2", Variabler.timeline.height / 2)
             .attr("stroke", "#ffffff")
-            .attr("stroke-width", SETTINGS.timeline.lineHeight);
+            .attr("stroke-width", Variabler.timeline.lineHeight);
     }
 
-    // Add circles for years with improved hover and click effects
+    // Cirkler i timelinen
     const circles = timelineG.selectAll("circle")
-        .data(SETTINGS.timeline.years)
+        .data(Variabler.timeline.years)
         .join("circle")
         .attr("cx", d => timelineScale(d))
-        .attr("cy", SETTINGS.timeline.height / 2)
-        .attr("r", SETTINGS.timeline.circleRadius)
+        .attr("cy", Variabler.timeline.height / 2)
+        .attr("r", Variabler.timeline.circleRadius)
         .attr("fill", d => d === year ? "#ffffff" : "none")
         .attr("stroke", "#ffffff")
         .attr("stroke-width", 2)
         .style("cursor", "pointer")
-        .style("pointer-events", "all"); // Ensure circles capture all mouse events
+        .style("pointer-events", "all"); 
 
-    // Add event listeners separately for better control
+    // Event listeners for cirklerne
     circles.on("mouseover.timeline", function(event, d) {
         if (d !== year) {
             d3.select(this)
                 .transition()
-                .duration(150) // Slightly faster transition
+                .duration(150) 
                 .attr("fill", "rgba(255, 255, 255, 0.5)")
-                .attr("r", SETTINGS.timeline.circleRadius * 1.1); // Slightly increase size on hover
+                .attr("r", Variabler.timeline.circleRadius * 1.1); 
         }
     });
 
@@ -160,38 +165,35 @@ function createSankeyDiagram(data, year) {
                 .transition()
                 .duration(150)
                 .attr("fill", "none")
-                .attr("r", SETTINGS.timeline.circleRadius); // Return to original size
+                .attr("r", Variabler.timeline.circleRadius); 
         }
     });
 
     circles.on("click.timeline", (event, d) => {
         if (d !== year) {
-            event.stopPropagation(); // Prevent event bubbling
+            event.stopPropagation(); 
             createSankeyDiagram(data, d);
         }
     });
 
-    // Add year labels
+    // Årstal labels for timelinen
     timelineG.selectAll("text")
-        .data(SETTINGS.timeline.years)
+        .data(Variabler.timeline.years)
         .join("text")
         .attr("x", d => timelineScale(d))
-        .attr("y", SETTINGS.timeline.height / 2 - SETTINGS.timeline.circleRadius * 2) // Move above circles
+        .attr("y", Variabler.timeline.height / 2 - Variabler.timeline.circleRadius * 2) 
         .attr("text-anchor", "middle")
-        .attr("fill", SETTINGS.colors.text)
-        .attr("font-size", "22px") // Increased font size
-        .attr("font-weight", "bold") // Make text bold
-        .attr("font-family", SETTINGS.fonts.heading)
+        .attr("fill", Variabler.colors.text)
+        .attr("font-size", "22px") 
+        .attr("font-weight", "bold") 
+        .attr("font-family", Variabler.fonts.heading)
         .text(d => d);
 
-    // Create nodes dynamically
+    // Sankey nodes oprettelse
     const sankeyData = {
         nodes: [
-            // Source nodes (countries)
             ...countries.map(country => ({ name: country })),
-            // Intermediate nodes (one per country)
             ...countries.map(country => ({ name: country + "_generated" })),
-            // Target nodes (waste types) - Environmental Load first
             { name: "Environmental Load" },
             { name: "Incinerated" },
             { name: "Recycled" }
@@ -199,30 +201,30 @@ function createSankeyDiagram(data, year) {
         links: []
     };
 
-    // Create links for each country
+    // Opret selve linjerne mellem noderne
     yearData.forEach(d => {
         const countryIndex = sankeyData.nodes.findIndex(n => n.name === d.country);
         const generatedIndex = countries.length + countries.findIndex(c => c === d.country);
         const targetStartIndex = countries.length * 2;
         
         if (countryIndex !== -1) {
-            // Link from country to its generated node
+            // Link fra country til generated
             sankeyData.links.push(
                 { source: countryIndex, target: generatedIndex, value: d.generated }
             );
             
-            // Links from generated to waste types - Environmental Load first
+            // Links fra generated til end nodes
             sankeyData.links.push(
                 { 
                     source: generatedIndex, 
                     target: targetStartIndex, 
-                    value: d.generated - d.incinerated - (d.recycled || 0) // Account for missing recycled data
+                    value: d.generated - d.incinerated - (d.recycled || 0) 
                 },
                 { source: generatedIndex, target: targetStartIndex + 1, value: d.incinerated }
             );
 
-            // Only add recycling link if the value is not 0
-            if (d.recycled && d.recycled > 0) {
+            // tilføj link til recycled hvis det ikke er 0
+            if (d.recycled > 0) {
                 sankeyData.links.push(
                     { source: generatedIndex, target: targetStartIndex + 2, value: d.recycled }
                 );
@@ -230,38 +232,38 @@ function createSankeyDiagram(data, year) {
         }
     });
 
-    // Update the sankeyGenerator configuration
+    // sankeyGenerator så den kan tegne det ordentligt
     const sankeyGenerator = sankey()
-        .nodeWidth(SETTINGS.nodeWidth)
-        .nodePadding(SETTINGS.nodePadding)
+        .nodeWidth(Variabler.nodes.width)
+        .nodePadding(Variabler.nodes.padding)
         .extent([
             [
-                SETTINGS.margin.left, 
-                SETTINGS.margin.top + SETTINGS.timeline.height + SETTINGS.header.yOffset + SETTINGS.header.fontSize + SETTINGS.timeline.margin
+                Variabler.margin.left, 
+                Variabler.margin.top + Variabler.timeline.height + Variabler.header.yOffset + Variabler.header.fontSize + Variabler.timeline.margin
             ], 
             [
-                width - SETTINGS.margin.right, 
-                height - SETTINGS.margin.bottom
+                width - Variabler.margin.right, 
+                height - Variabler.margin.bottom
             ]
         ])
         .nodeSort((a, b) => {
-            // Sort end nodes to the right
+            // end nodes til højre
             if (["Incinerated", "Recycled", "Environmental Load"].includes(a.name) ||
                 ["Incinerated", "Recycled", "Environmental Load"].includes(b.name)) {
                 return 0;
             }
             
-            // Remove _generated suffix for comparison
+            // fjerne _generated fra navnet
             const nameA = a.name.replace("_generated", "");
             const nameB = b.name.replace("_generated", "");
             
-            // Keep alphabetical order for countries and their generated nodes
+            // alfabetisk sortering
             return d3.ascending(nameA, nameB);
         });
 
     const sankeyLayout = sankeyGenerator(sankeyData);
 
-    // Draw the links with animation
+    // tegn linjerne og animation på det
     svg.append("g")
         .selectAll("path")
         .data(sankeyLayout.links)
@@ -269,27 +271,27 @@ function createSankeyDiagram(data, year) {
         .attr("d", sankeyLinkHorizontal())
         .attr("fill", "none")
         .attr("stroke", d => {
-            if (!d.source.name.includes("_generated")) return SETTINGS.colors.generated;
-            if (d.target.name === "Incinerated") return SETTINGS.colors.incinerated;
-            if (d.target.name === "Recycled") return SETTINGS.colors.recycled;
-            if (d.target.name === "Environmental Load") return SETTINGS.colors.generated;
-            return SETTINGS.colors.generated;
+            if (!d.source.name.includes("_generated")) return Variabler.colors.generated;
+            if (d.target.name === "Incinerated") return Variabler.colors.incinerated;
+            if (d.target.name === "Recycled") return Variabler.colors.recycled;
+            if (d.target.name === "Environmental Load") return Variabler.colors.generated;
+            return Variabler.colors.generated;
         })
-        .attr("stroke-width", d => Math.max(SETTINGS.linkStrokeWidth, d.width))
+        .attr("stroke-width", d => Math.max(Variabler.linkStrokeWidth, d.width))
         .style("stroke-dasharray", function() {
             return this.getTotalLength() + " " + this.getTotalLength();
         })
         .style("animation", (d, i) => {
-            // First phase: all country to generated links animate together
+            // Første fase
             if (!d.source.name.includes("_generated")) {
-                return `flowFirstPhase 1.2s ease-out forwards`; // Try 1.2s instead of 0.8s
+                return `flowFirstPhase 1.2s ease-out forwards`; 
             }
-            // Second phase: staggered animation for links to end nodes
-            return `flowSecondPhase 1.5s ease-in-out ${1500 + i * 100}ms forwards`; // Increased delay to 1500ms
+            // Anden fase
+            return `flowSecondPhase 1.5s ease-in-out ${1500 + i * 100}ms forwards`; 
         })
         .attr("opacity", 0);
 
-    // Draw the nodes with animation
+    // tegn noderne og animation på det
     svg.append("g")
         .selectAll("rect")
         .data(sankeyLayout.nodes)
@@ -297,27 +299,26 @@ function createSankeyDiagram(data, year) {
         .attr("x", d => d.x0)
         .attr("y", d => d.y0)
         .attr("width", d => d.x1 - d.x0)
-        .attr("height", d => Math.max(SETTINGS.nodeMinHeight, d.y1 - d.y0))  // Set minimum height
+        .attr("height", d => Math.max(Variabler.nodes.minHeight, d.y1 - d.y0))  
         .attr("y", d => {
-            // Center the node if it's smaller than minimum height
             const actualHeight = d.y1 - d.y0;
-            if (actualHeight < SETTINGS.nodeMinHeight) {
-                return d.y0 - (SETTINGS.nodeMinHeight - actualHeight) / 2;
+            if (actualHeight < Variabler.nodes.minHeight) {
+                return d.y0 - (Variabler.nodes.minHeight - actualHeight) / 2;
             }
             return d.y0;
         })
         .attr("fill", d => {
-            if (d.name === "Environmental Load") return SETTINGS.colors.generated; // Changed to purple
-            if (d.name === "Incinerated") return SETTINGS.colors.incinerated;
-            if (d.name === "Recycled") return SETTINGS.colors.recycled;
-            if (d.name.includes("_generated")) return SETTINGS.colors.generated;
-            return SETTINGS.colors.countries; // Purple for country nodes
+            if (d.name === "Environmental Load") return Variabler.colors.generated; 
+            if (d.name === "Incinerated") return Variabler.colors.incinerated;
+            if (d.name === "Recycled") return Variabler.colors.recycled;
+            if (d.name.includes("_generated")) return Variabler.colors.generated;
+            return Variabler.colors.countries; 
         })
-        .attr("stroke", SETTINGS.colors.stroke)
+        .attr("stroke", Variabler.colors.stroke)
         .style("animation", (d, i) => `fadeIn 0.8s ease-out ${i * 100}ms forwards`)
         .attr("opacity", 0);
 
-    // Add labels for countries and waste types
+    // Labels til højre for end nodes
     svg.append("g")
         .selectAll("text")
         .data(sankeyLayout.nodes)
@@ -329,9 +330,8 @@ function createSankeyDiagram(data, year) {
             return d.x1 + 10;
         })
         .attr("y", d => {
-            // Adjust y position for end nodes to accommodate two lines
             if (["Incinerated", "Recycled", "Environmental Load"].includes(d.name)) {
-                return (d.y1 + d.y0) / 2 - 10; // Move up slightly to center both lines
+                return (d.y1 + d.y0) / 2 - 10; 
             }
             return (d.y1 + d.y0) / 2;
         })
@@ -343,18 +343,18 @@ function createSankeyDiagram(data, year) {
             if (d.name.includes("_generated")) return "";
             
             if (["Incinerated", "Recycled", "Environmental Load"].includes(d.name)) {
-                const totalValue = (d.value / 1e6).toFixed(1); // Convert to millions
-                return `${d.name}\n(${totalValue}M tonnes)`; // Add line break
+                const totalValue = (d.value / 1e6).toFixed(1); 
+                return `${d.name}\n(${totalValue}M tonnes)`; 
             }
             
             return d.name;
         })
-        // Split text into two lines for end nodes
+        // gør det til 2 linjer
         .each(function(d) {
             if (["Incinerated", "Recycled", "Environmental Load"].includes(d.name)) {
                 const el = d3.select(this);
                 const words = el.text().split('\n');
-                el.text(''); // Clear existing text
+                el.text(''); 
                 
                 el.append("tspan")
                     .attr("x", d.x1 + 10)
@@ -367,42 +367,48 @@ function createSankeyDiagram(data, year) {
                     .text(words[1]);
             }
         })
-        .attr("fill", SETTINGS.colors.text)
-        .attr("font-size", `${SETTINGS.fontSize.labels}px`)
+        .attr("fill", Variabler.colors.text)
+        .attr("font-size", `${Variabler.fontSize.labels}px`)
         .attr("font-weight", "bold")
         .attr("font-family", d => {
-            // Use heading font for end nodes, text font for countries
             return ["Incinerated", "Recycled", "Environmental Load"].includes(d.name) 
-                ? SETTINGS.fonts.heading 
-                : SETTINGS.fonts.text;
+                ? Variabler.fonts.heading 
+                : Variabler.fonts.text;
         })
         .style("animation", (d, i) => `fadeIn 0.8s ease-out ${i * 100}ms forwards`)
         .attr("opacity", 0);
 
-    // Add tooltip div if it doesn't exist
+    // informations box, kaldes tooltip i d3
     const tooltip = d3.select("body").append("div")
         .attr("class", "tooltip");
 
-    // Helper function to format numbers and add tonnes
-    const formatNumber = num => {
-        if (num >= 1e6) return `${(num/1e6).toFixed(1)}M tonnes`;
-        if (num >= 1e3) return `${(num/1e3).toFixed(1)}K tonnes`;
-        return `${num} tonnes`;
-    };
+    // scale for de tallene og formattering til K og M
+    const numberScale = d3.scaleThreshold()
+        .domain([1e3, 1e6])  
+        .range([
+            d => `${d.toFixed(1)} tonnes`,
+            d => `${(d/1e3).toFixed(1)}K tonnes`,
+            d => `${(d/1e6).toFixed(1)}M tonnes`
+        ]);
 
-    // Function to calculate percentages
+    // Ændrer formatNumber til at bruge numberScale:
+    const formatNumber = num => numberScale(num)(num);
+
+    // Scale for procent
+    const percentageScale = d3.scaleLinear()
+        .domain([0, 1])
+        .range([0, 100]);
+
+    // Function der beregner procenterne
     const calculatePercentages = (data) => {
         const generated = data.generated || data.value;
-        const incinerated = data.incinerated || (data.target?.name === "Incinerated" ? data.value : 0);
-        const recycled = data.recycled || (data.target?.name === "Recycled" ? data.value : 0);
-        
         return {
-            incinerated: ((incinerated / generated) * 100).toFixed(1),
-            recycled: ((recycled / generated) * 100).toFixed(1)
+            incinerated: percentageScale(data.incinerated / generated).toFixed(1),
+            recycled: percentageScale((data.recycled || 0) / generated).toFixed(1)
         };
     };
 
-    // Update the getDetailedInfo function
+    // Details for tooltip (information box)
     const getDetailedInfo = d => {
         if (["Incinerated", "Recycled", "Environmental Load"].includes(d.name)) {
             // For end nodes (right side)
@@ -419,11 +425,10 @@ function createSankeyDiagram(data, year) {
                     Total: ${formatNumber(d.value)}<br>
                     <br>Sources (ordered by amount):<br>${sources}`;
         } else {
-            // For country nodes (left side) and generated nodes (middle)
             const countryName = d.name.replace("_generated", "");
             const data = yearData.find(item => item.country === countryName);
             
-            if (!data) return ""; // Guard clause for missing data
+            if (!data) return ""; 
             
             const environmentalLoad = data.generated - data.incinerated - (data.recycled || 0);
             const envLoadPercent = ((environmentalLoad / data.generated) * 100).toFixed(1);
@@ -438,31 +443,31 @@ function createSankeyDiagram(data, year) {
         }
     };
 
-    // Update the updateTooltip function
+    // Updater tooltip med information (information box)
     const updateTooltip = (element, event, d) => {
         let borderColor;
         
         if (d.source) {
-            // For links
+            // For linjer og ændrer stroke/border farven
             if (!d.source.name.includes("_generated")) {
-                borderColor = SETTINGS.colors.generated; // Purple for country to generated
+                borderColor = Variabler.colors.generated; 
             } else if (d.target.name === "Environmental Load") {
-                borderColor = SETTINGS.colors.generated; // Purple for environmental load
+                borderColor = Variabler.colors.generated; 
             } else if (d.target.name === "Incinerated") {
-                borderColor = SETTINGS.colors.incinerated; // Orange for incinerated
+                borderColor = Variabler.colors.incinerated; 
             } else if (d.target.name === "Recycled") {
-                borderColor = SETTINGS.colors.recycled; // Green for recycled
+                borderColor = Variabler.colors.recycled; 
             }
         } else {
-            // For all nodes
+            // For nodes og ændrer stroke/border farven
             if (d.name.includes("_generated") || d.name === "Environmental Load") {
-                borderColor = SETTINGS.colors.generated; // Purple for generated and environmental load
+                borderColor = Variabler.colors.generated; 
             } else if (d.name === "Incinerated") {
-                borderColor = SETTINGS.colors.incinerated;
+                borderColor = Variabler.colors.incinerated;
             } else if (d.name === "Recycled") {
-                borderColor = SETTINGS.colors.recycled;
+                borderColor = Variabler.colors.recycled;
             } else {
-                borderColor = SETTINGS.colors.generated; // Purple for country nodes
+                borderColor = Variabler.colors.generated; 
             }
         }
 
@@ -473,38 +478,38 @@ function createSankeyDiagram(data, year) {
             .style("top", (event.pageY - 10) + "px");
     };
 
-    // Add header text
+    // Header tekst
     const header = svg.append("g")
-        .attr("class", "header");  // Remove the transform from here
+        .attr("class", "header");  
 
     header.append("text")
-        .attr("x", SETTINGS.width / 2)  // Center based on total width
-        .attr("y", SETTINGS.margin.top + SETTINGS.timeline.height + SETTINGS.header.yOffset)  // Move y position here
+        .attr("x", Variabler.width / 2)  
+        .attr("y", Variabler.margin.top + Variabler.timeline.height + Variabler.header.yOffset)  
         .attr("text-anchor", "middle")
-        .attr("dominant-baseline", "middle")  // Add this for vertical centering
-        .attr("fill", SETTINGS.colors.text)
-        .attr("font-size", `${SETTINGS.header.fontSize}px`)
+        .attr("dominant-baseline", "middle") 
+        .attr("fill", Variabler.colors.text)
+        .attr("font-size", `${Variabler.header.fontSize}px`)
         .attr("font-weight", "bold")
-        .attr("font-family", SETTINGS.fonts.heading)
-        .text(`${SETTINGS.header.text} ${year}`)
+        .attr("font-family", Variabler.fonts.heading)
+        .text(`${Variabler.header.text} ${year}`)
         .style("animation", "fadeIn 0.8s ease-out forwards")
         .attr("opacity", 0);
 
-    // Update the annotation positioning code
+    // Annotation tekst for 2004, 2006, 2008
     if ([2004, 2006, 2008].includes(year)) {
-        const annotationX = width - SETTINGS.margin.right + SETTINGS.annotation.x;  // Use x offset
-        const annotationY = height - SETTINGS.margin.bottom + SETTINGS.annotation.y;  // Use y offset
+        const annotationX = width - Variabler.margin.right + Variabler.annotation.x;  
+        const annotationY = height - Variabler.margin.bottom + Variabler.annotation.y;  
         
         const annotation = svg.append("g")
             .attr("class", "annotation")
             .attr("transform", `translate(${annotationX}, ${annotationY})`);
         
-        // Add annotation text with line breaks and correct font
+        // annotation text med line breaks
         annotation.append("text")
             .attr("text-anchor", "middle")
-            .attr("fill", SETTINGS.colors.text)
-            .attr("font-family", SETTINGS.fonts.heading)  // Changed to Oswald
-            .attr("font-size", `${SETTINGS.annotation.fontSize}px`)
+            .attr("fill", Variabler.colors.text)
+            .attr("font-family", Variabler.fonts.heading) 
+            .attr("font-size", `${Variabler.annotation.fontSize}px`)
             .selectAll("tspan")
             .data([
                 "Before 2010, no recycled hazardous waste",
@@ -522,7 +527,7 @@ function createSankeyDiagram(data, year) {
      
     }
 
-    // Apply hover effects to nodes
+    // Hover effects fpr nodes
     svg.selectAll("rect")
         .on("mouseover", (event, d) => updateTooltip("node", event, d))
         .on("mousemove", (event) => {
@@ -531,25 +536,24 @@ function createSankeyDiagram(data, year) {
         })
         .on("mouseout", () => tooltip.style("display", "none"));
 
-    // Replace just the path hover events at the bottom of createSankeyDiagram function
     svg.selectAll("path")
         .on("mouseover", function(event, d) {
-            // Highlight the hovered link
+            // Highlight linjerne
             d3.select(this)
                 .style("opacity", 1)
                 .style("stroke-opacity", 1);
             
-            // Get the country data and border color based on link type
+            // hent det rigtige lands data
             const countryName = d.source.name.replace("_generated", "");
             const data = yearData.find(item => item.country === countryName);
             
-            // Determine border color based on link target
-            let borderColor = SETTINGS.colors.generated; // Default purple
+            // border stroke farve
+            let borderColor = Variabler.colors.generated; 
             if (d.source.name.includes("_generated")) {
                 if (d.target.name === "Incinerated") {
-                    borderColor = SETTINGS.colors.incinerated;
+                    borderColor = Variabler.colors.incinerated;
                 } else if (d.target.name === "Recycled") {
-                    borderColor = SETTINGS.colors.recycled;
+                    borderColor = Variabler.colors.recycled;
                 }
             }
             
@@ -575,63 +579,54 @@ function createSankeyDiagram(data, year) {
                 .style("top", (event.pageY - 10) + "px");
         })
         .on("mouseout", function() {
-            // Reset the link opacity
+            // fjern highlight fra linjerne
             d3.select(this)
-                .style("opacity", SETTINGS.opacity.links)
-                .style("stroke-opacity", SETTINGS.opacity.links);
+                .style("opacity", Variabler.opacity.links)
+                .style("stroke-opacity", Variabler.opacity.links);
             
             tooltip.style("display", "none");
         });
 
-    // Add legend
+    // Legend for sankey diagrammet
     const legend = svg.append("g")
         .attr("class", "legend")
-        .attr("transform", `translate(${width - SETTINGS.margin.right - 250}, ${height - SETTINGS.margin.bottom - 150})`);
+        .attr("transform", `translate(${width - Variabler.margin.right - 250}, ${height - Variabler.margin.bottom - 150})`);
 
-    // Add white rectangle border around legend
+    // Hvid rektangel rundt om legend
     legend.append("rect")
-        .attr("width", 370)  // Increased width to fit content
+        .attr("width", 370)  
         .attr("height", 145)
         .attr("fill", "none")
-        .attr("stroke", SETTINGS.colors.text)
+        .attr("stroke", Variabler.colors.text)
         .attr("stroke-width", 2)
         .attr("rx", 5);
 
-    // Legend items with adjusted positioning
+    // Legends selve teksten
     const legendItems = [
-        { color: SETTINGS.colors.generated, text: "Generated/Environmental Load" },
-        { color: SETTINGS.colors.incinerated, text: "Incinerated" },
-        { color: SETTINGS.colors.recycled, text: "Recycled" }
+        { color: Variabler.colors.generated, text: "Generated/Environmental Load" },
+        { color: Variabler.colors.incinerated, text: "Incinerated" },
+        { color: Variabler.colors.recycled, text: "Recycled" }
     ];
 
-    // Add legend items with centered positioning
     const legendItem = legend.selectAll(".legend-item")
         .data(legendItems)
         .join("g")
         .attr("class", "legend-item")
-        .attr("transform", (d, i) => `translate(25, ${35 + i * 30})`);  // Adjusted padding
+        .attr("transform", (d, i) => `translate(25, ${35 + i * 30})`); 
 
-    // Add colored rectangles
+    // Legend farver
     legendItem.append("rect")
         .attr("width", 20)
         .attr("height", 20)
         .attr("fill", d => d.color);
 
-    // Add text labels with adjusted positioning
+    // tilføj tekst til legend
     legendItem.append("text")
-        .attr("x", 35)  // More space after colored rectangle
+        .attr("x", 35) 
         .attr("y", 10)
-        .attr("fill", SETTINGS.colors.text)
-        .attr("font-family", SETTINGS.fonts.heading)
-        .attr("font-size", `${SETTINGS.fontSize.labels}px`)
+        .attr("fill", Variabler.colors.text)
+        .attr("font-family", Variabler.fonts.heading)
+        .attr("font-size", `${Variabler.fontSize.labels}px`)
         .attr("dominant-baseline", "middle")
         .text(d => d.text);
 }
-
-// Load and process the data
-d3.json("data.json").then(function(rawData) {
-    // Initial render with 2004 data
-    createSankeyDiagram(rawData, SETTINGS.selectedYear);
-}).catch(error => {
-    console.error("Error loading or processing data:", error);
-});

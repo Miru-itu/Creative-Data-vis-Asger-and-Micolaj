@@ -1,51 +1,28 @@
-/* Import the Roboto font */
-@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap");
-
-/* Basic reset */
 * {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* Body styling */
 body {
-	font-family: 'Noto Sans', sans-serif;
-	background-color: #1E1E1E;  /* Keep only the grey background */
-	color: #fff;
-	line-height: 1.6;
-	padding: 20px;
+    font-family: 'Noto Sans', sans-serif;
+    background-color: #1E1E1E; 
+    color: #fff;
+    line-height: 1.6;
+    padding: 20px;
 }
 
-/* Header styling - keep the borders */
+/* Headers */
 .header {
     text-align: center;
     padding: 20px 0;
-    color: #fff;
     margin-bottom: 20px;
     border-bottom-style: solid;
     border-top-style: solid;
     border-color: #fff;
 }
 
-.header h1, .header h2 {
-    font-family: 'Oswald', sans-serif;
-    color: #ffffff;
-    text-align: center;
-    margin: 0;
-}
-
-.header h1 {
-	font-size: 36px;  /* 32 + 4 */
-	margin-bottom: 10px;
-}
-
-.header h2 {
-	font-size: 28px;  /* 24 + 4 */
-	font-weight: 300;
-}
-
-/* Description styling - remove borders */
+/* En hel masse CSS for at få description til at se ordentlig ud*/
 .description {
     display: flex;
     justify-content: space-between;
@@ -60,7 +37,7 @@ body {
     padding: 50px;
     border-radius: 5px;
     margin-right: 20px;
-    border: none;  /* Explicitly remove any borders */
+    border: none;  
 }
 
 .description .intro h3 {
@@ -102,26 +79,26 @@ body {
 	text-align: left; /* Center align the content */
 }
 
-/* Remove right margin from the last item */
 .description .intro,
 .description .how-to-read,
 .description #data-description:last-child {
 	margin-right: 0;
 }
 
+/* Pictures*/
 .visual-examples {
-    flex: 1.2;  /* Keep the width ratio */
+    flex: 1.2;  
     padding: 50px;
     display: flex;
     flex-direction: column;
-    gap: 35px;  /* Slightly reduced gap */
-    height: 100%;  /* Fill available height */
+    gap: 35px;  
+    height: 100%;  
 }
 
 .example {
     position: relative;
     width: 100%;
-    height: 330px;  /* Reduced from 370px */
+    height: 330px;  
     margin-bottom: 20px;
 }
 
@@ -132,15 +109,13 @@ body {
     border-radius: 5px;
 }
 
-/* Remove margin from last image */
 .example:last-child {
     margin-bottom: 0;
 }
 
-/* Remove duplicate visual-examples definition */
 .visual-examples {
     display: flex;
-    justify-content: space-between; /* Changed from center to space-between */
+    justify-content: space-between; 
 }
 
 .caption {
@@ -155,11 +130,11 @@ body {
     width: 100%;
     max-width: 2400px;
     margin: 0 auto;
-    min-height: 600px;  /* Reduced from 1200px */
+    min-height: 600px; 
     background-color: #1E1E1E;
     transform: scale(0.8);
     transform-origin: top center;
-    margin-bottom: -500px; /* Add negative margin to pull up the content below */
+    margin-bottom: -500px; 
 }
 
 #canvas svg {
@@ -168,7 +143,7 @@ body {
     height: 100%;
 }
 
-/* Source styling */
+/* Bunden source med hover og links */
 .source {
 	text-align: center;
 	padding: 10px;
@@ -184,12 +159,12 @@ body {
 }
 
 .source a:hover {
-	color: #7570b3;  /* Using the purple from your color scheme */
+	color: #7570b3;  
 }
 
 .source p {
 	margin: 5px 0;
-	font-size: 16px;  /* 12 + 4 */
+	font-size: 16px;  
 }
 
 @keyframes flowAnimation {
@@ -214,28 +189,30 @@ body {
     }
 }
 
+/* informations box */
 .tooltip {
     position: absolute;
-    padding: 12px 16px;  /* Reduced from 15px 20px by 20% */
+    padding: 12px 16px;  
     background: rgba(0, 0, 0, 0.9);
     color: #fff;
-    border: 3px solid #fff;  /* Increased border width for better visibility */
-    border-radius: 6px;  /* Reduced from 8px by 20% */
+    border: 3px solid #fff;  
+    border-radius: 6px;  
     pointer-events: none;
-    font-size: 15px;  /* Reduced from 19px by 20% */
+    font-size: 15px; 
     line-height: 1.5;
     z-index: 1000;
     display: none;
-    min-width: 240px;  /* Reduced from 300px by 20% */
-    max-width: 400px;  /* Reduced from 500px by 20% */
-    transition: border-color 0.3s ease; /* Smooth color transition */
+    min-width: 240px;  
+    max-width: 400px;  
+    transition: border-color 0.3s ease; 
 }
 
+/* informations strong */
 .tooltip strong {
-    font-size: 18px;  /* Reduced from 22px by 20% */
+    font-size: 18px;  
     display: block;
-    margin-bottom: 6px;  /* Reduced from 8px by 20% */
-    color: #ffffff;  /* Gold color for headers */
+    margin-bottom: 6px;  
+    color: #ffffff;  
 }
 
 @keyframes flowFirstPhase {
@@ -260,13 +237,13 @@ body {
     }
 }
 
-/* Typography base settings */
+/* Typography almindelig tekst Noto Sans */
 body {
     font-family: 'Noto Sans', sans-serif;
     line-height: 1.6;
 }
 
-/* Headings */
+/* Headings Oswald*/
 h1, h2, h3, 
 .header h1, 
 .header h2,
@@ -282,7 +259,8 @@ h1, h2, h3,
     font-family: 'Noto Sans', sans-serif;
 }
 
-/* Tooltip styling */
+/* Korrekt tekst for informations box og Legend */
+
 .tooltip {
     font-family: 'Noto Sans', sans-serif;
 }
@@ -291,17 +269,15 @@ h1, h2, h3,
     font-family: 'Oswald', sans-serif;
 }
 
-/* Legend text */
+
 .legend text {
     font-family: 'Oswald', sans-serif;
 }
 
-/* Timeline labels */
 .timeline text {
     font-family: 'Oswald', sans-serif;
 }
 
-/* Node labels */
 #canvas text {
     font-family: 'Oswald', sans-serif;
 }
